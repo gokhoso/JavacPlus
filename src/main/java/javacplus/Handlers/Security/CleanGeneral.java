@@ -15,6 +15,8 @@ public class CleanGeneral {
     }
 
     private void cleanLongBotMessages(MessageReceivedEvent event) {
+        System.err.println("Test");
+
         final boolean isBot = event.getAuthor().isBot();
         final boolean isClient = event.getAuthor().getId().equals(event.getJDA().getSelfUser().getId());
         final boolean isLarge = event.getMessage().getContentRaw().length() > MAX_STRING_LENGTH;

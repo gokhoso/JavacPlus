@@ -1,0 +1,33 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "java",
+      "name": "Javac",
+      "request": "launch",
+      "mainClass": "javacplus.Javac",
+      "projectName": "javac"
+    },
+    {
+      "type": "java",
+      "name": "Main",
+      "request": "launch",
+      "mainClass": "net.javacplus.Main",
+      "projectName": "javacplus"
+    },
+    {
+      "type": "java",
+      "name": "Main",
+      "request": "launch",
+      "mainClass": "net.javacplus.Main",
+      "projectName": "kapsayici"
+    },
+    {
+      "type": "java",
+      "name": "Attach to Maven Debug",
+      "request": "attach",
+      "hostName": "127.0.0.1",
+      "port": 5006
+    }
+  ]
+}

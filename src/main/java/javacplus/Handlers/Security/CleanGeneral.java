@@ -15,7 +15,7 @@ public class CleanGeneral {
     }
 
     private void cleanLongBotMessages(MessageReceivedEvent event) {
-        System.err.println("Test");
+        System.err.println("Testk");
 
         final boolean isBot = event.getAuthor().isBot();
         final boolean isClient = event.getAuthor().getId().equals(event.getJDA().getSelfUser().getId());

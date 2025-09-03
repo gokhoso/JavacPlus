@@ -9,7 +9,6 @@ import io.github.cdimascio.dotenv.Dotenv;
 import javacplus.Handlers.Command.CommandHandler;
 import javacplus.Handlers.Component.ComponentMain;
 import javacplus.Handlers.Database.DatabaseHandler;
-import javacplus.Handlers.Security.SpamProtect;
 import javacplus.Listeners.ListenerComponent;
 import javacplus.Listeners.ListenerMember;
 import javacplus.Listeners.ListenerMessage;
@@ -21,7 +20,6 @@ public class Javac {
     private static final Logger logger = LoggerFactory.getLogger(Javac.class);
     public static Javac instance;
     private static ShardManager shardManager;
-    private final SpamProtect spamProtect = new SpamProtect();
     private final DatabaseHandler mainDatabase = new DatabaseHandler();
     private final CommandHandler commandHandler = new CommandHandler();
     private final ComponentMain componentMain = new ComponentMain();
@@ -33,7 +31,6 @@ public class Javac {
         } catch (Exception e) {
             logger.error("Failed while executing javacMain: {}", e);
         }
-
     }
 
     private ShardManager createShardManager(Dotenv dotenv) {
@@ -56,7 +53,7 @@ public class Javac {
         Dotenv dotenv = Dotenv.load();
         shardManager = createShardManager(dotenv);
 
-        addEventListener(new ListenerMessage(commandHandler, componentMain, mainDatabase, spamProtect));
+        addEventListener(new ListenerMessage(commandHandler, componentMain, mainDatabase));
         addEventListener(new ListenerMember(mainDatabase));
         addEventListener(new ListenerComponent(componentMain, mainDatabase));
         //addEventListener(new ListenerComponent(componentHandler, mainDatabase));

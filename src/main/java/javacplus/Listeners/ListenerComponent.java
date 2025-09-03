@@ -1,6 +1,11 @@
 package javacplus.Listeners;
 
+import java.util.List;
+
 import javax.annotation.Nonnull;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javacplus.Entities.UserButton;
 import javacplus.Handlers.Component.ComponentContext;
@@ -11,6 +16,7 @@ import net.dv8tion.jda.api.events.interaction.component.GenericComponentInteract
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 public class ListenerComponent extends ListenerAdapter {
+    private final Logger logger = LoggerFactory.getLogger(ListenerComponent.class);
     private final DatabaseHandler database;
     private final ComponentMain componentMain;
 
@@ -24,16 +30,24 @@ public class ListenerComponent extends ListenerAdapter {
         String messageId = event.getMessageId();
         String userId =  event.getUser().getId();
 
-        UserButton button = componentMain.getButtonManager().getRegistry().getUserRegistry(userId);
-        String buttonComponentId = button.getInformation()[0];
-        String buttonMessageId = button.getInformation()[1];
+        List<UserButton> buttons = componentMain.getButtonManager().getRegistry().getUserRegistry(userId);
 
-        System.err.println("ButtonComponent Id: " + buttonComponentId);
-
-        if (messageId.equals(buttonMessageId)) {
-            ComponentContext ctx = new ComponentContext(event, database);
-            IButton button2 = componentMain.getButtonManager().getRegistry().getButton(buttonComponentId); 
-            button2.execute(ctx);
+        if (buttons == null) {
+            logger.debug("Buttons is NULL!");
+            return;
         }
+        
+        buttons.forEach(button -> {
+            if (button.getInformation().getUniqueMessageId().equals(messageId)) {
+                ComponentContext ctx = new ComponentContext(event, database);
+                IButton button2 = componentMain.getButtonManager().getRegistry().getButton(button.getInformation().getId()); 
+                if (button2 != null) {
+                    event.editMessage(event.getMessage().getContentRaw() + "\nButton is being processed <a:tts_loading:1407326874790526997>").queue();
+                    button2.execute(ctx);
+                    return;
+                }
+                logger.debug("Button not found!");
+            }
+        });
     }
 }

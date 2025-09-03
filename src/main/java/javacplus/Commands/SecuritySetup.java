@@ -1,13 +1,16 @@
 package javacplus.Commands;
 
+import java.awt.Color;
 import java.sql.SQLException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javacplus.Entities.ButtonInformation;
 import javacplus.Handlers.Command.ContextCommand;
 import javacplus.Handlers.Component.ComponentMain;
 import javacplus.Interfaces.ICommand;
+import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
@@ -23,7 +26,7 @@ public class SecuritySetup implements ICommand {
             """;
 
     @Override
-    public String[] getInformation() {
+    public String[] getInformation() { 
         return new String[] {
                 "security",
                 "Enables security for this server",
@@ -60,22 +63,24 @@ public class SecuritySetup implements ICommand {
                 });
     }
 
+    private EmbedBuilder getEmbed(ContextCommand ctx) {
+        return new EmbedBuilder()
+        .setAuthor(ctx.getGuild().getName() + " - Security Setup", null, ctx.getGuild().getIconUrl())
+        .setColor(Color.pink)
+        .setDescription("<:tetopelush:1409830322413244416>")
+        .addField( "Question 1", "Do you want door protection?", true);
+    }
+
     @Override
     public void execute(ContextCommand ctx) {
         ComponentMain componentMain = ctx.getComponentHandler();
-        ctx.getChannel().sendMessage("Security test").queue(
+        ctx.getChannel().sendMessageEmbeds(getEmbed(ctx).build()).queue(
                 message -> {
-                    // componentHandler.createButtonPrimary(message, ctx.getAuthorId(),
-                    // "securitybutton", "Test Label");
-
-                    String[] information = new String[] {
-                        "securitybutton",
-                        message.getId()
-                    };
-
-                    logger.debug("Adding SecurityComponentId: " + message.getId());
-                    componentMain.getButtonManager().getCreator().addUserButton(ctx.getAuthorId(), message, information, ButtonStyle.SECONDARY);
-                    //componentHandler.getCreator().createButtonPrimary(message, ctx.getAuthorId(), information , "Accept");
+                    ButtonInformation infoAccept = new ButtonInformation("securityAccept", "yes", message.getId());
+                    ButtonInformation infoDeny = new ButtonInformation("securityDeny", "no", message.getId());
+                    
+                    componentMain.getButtonManager().getCreator().createUserButton(ctx.getAuthorId(), message, infoAccept, ButtonStyle.SECONDARY);
+                    componentMain.getButtonManager().getCreator().createUserButton(ctx.getAuthorId(), message, infoDeny, ButtonStyle.PRIMARY);
                 });
     }
 

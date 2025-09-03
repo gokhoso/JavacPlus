@@ -1,8 +1,12 @@
 package javacplus.Handlers.Component.Button;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javacplus.Entities.ButtonInformation;
 import javacplus.Entities.UserButton;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.interactions.components.ActionRow;
@@ -17,30 +21,43 @@ public class ButtonCreator {
         this.bRegistry = bRegistry;
     }
 
-    private Button getButton(String userId, String label, ButtonStyle bStyle) {
+    private Button createButton(String id, String label, ButtonStyle bStyle) {
         Button button = switch (bStyle) {
-            case DANGER -> Button.danger(userId, label);
-            case LINK ->  Button.link(userId, label);
-            case PRIMARY -> Button.primary(userId, label);
-            case SECONDARY -> Button.secondary(userId, label);
-            case SUCCESS -> Button.success(userId, label);
+            case DANGER -> Button.danger(id, label);
+            case LINK ->  Button.link(id, label);
+            case PRIMARY -> Button.primary(id, label);
+            case SECONDARY -> Button.secondary(id, label);
+            case SUCCESS -> Button.success(id, label);
             default -> null;
         };        
 
         return button;
     }
 
-    public void addUserButton(String userId, Message message,  String[] information, ButtonStyle bStyle) {
-        if (userId == null || message == null || information == null || information.length < 2 || bStyle == null) {
+    public void createUserButton(String userId, Message message,  ButtonInformation information, ButtonStyle bStyle) {
+        if (userId == null || message == null || information == null || bStyle == null) {
             logger.debug("addUserButton is started with null parameters!");
             return;
         }
 
         bRegistry.registerUserButton(userId, new UserButton(information, bStyle));
+        List<UserButton> userButtons = bRegistry.getUserRegistry(userId);
+        List<Button> buttons = new ArrayList<>();
 
-        String label = (information.length > 0) ? information[0] : "Button";
-        Button button = getButton(userId, label, bStyle);
+        for (UserButton btn : userButtons) {
+            String btnId = btn.getInformation().getId();
+            String btnLabel = btn.getInformation().getLabel();
+            Button button = createButton(btnId, btnLabel, btn.getButtonStyle());
+            buttons.add(button);
+        }
 
-        message.editMessageComponents().setComponents(ActionRow.of(button)).queue();
+        if (buttons.isEmpty()) {
+            logger.debug("Buttons is null");
+            return;
+        }
+
+        message.editMessageComponents().setComponents(
+            ActionRow.of(buttons)
+        ).queue();
     }
 }

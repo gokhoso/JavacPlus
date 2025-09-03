@@ -8,6 +8,7 @@ import javacplus.Handlers.Database.DatabaseHandler;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.SelfUser;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
@@ -20,6 +21,10 @@ public class ContextCommand {
         this.event = event;
         this.mainDatabase = database;
         this.componentMain = componentMain;
+    }
+
+    public SelfUser getSelfUser() {
+        return this.event.getJDA().getSelfUser();
     }
 
     public ComponentMain getComponentHandler() {

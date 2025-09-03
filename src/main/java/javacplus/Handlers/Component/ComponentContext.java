@@ -1,6 +1,7 @@
 package javacplus.Handlers.Component;
 
 import javacplus.Handlers.Database.DatabaseHandler;
+import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.events.interaction.component.GenericComponentInteractionCreateEvent;
 
 public class ComponentContext {
@@ -13,6 +14,10 @@ public class ComponentContext {
 
     public GenericComponentInteractionCreateEvent getEvent() {
         return event;
+    }
+
+    public Guild getGuild() {
+        return event.getGuild();
     }
 
     public DatabaseHandler getDatabase() {

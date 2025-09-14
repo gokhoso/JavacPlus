@@ -59,6 +59,8 @@ public class LoggerSystem {
         return null;
       }
 
+      if (cachedUser.getUserMessages().isEmpty()) return null;
+
       UserMessage msg = cachedUser.getUserMessages().getLast();
 
       if (msg == null) {
@@ -82,16 +84,21 @@ public class LoggerSystem {
     CachedMessage cachedMessage = cUser.getCacheMessage(messageId);
     CachedUser cachedUser = cUser.getCache(cachedMessage.getAuthorId());
 
-    if (cachedMessage == null || cachedUser == null) {
+    if (cachedUser == null) {
       logger.debug("CachedMessage or CachedUser is NULL!");
       return;
     }
 
-    UserMessage msg = getUserMessages(
+
+
+    List<UserMessage> msgs = getUserMessages(
       cachedMessage,
       event.getMessageId()
-    ).getLast();
+    );
 
+    if (msgs == null || msgs.isEmpty()) return;
+
+    UserMessage msg = msgs.getLast();
     if (msg == null) {
       logger.debug("Message is NULL!");
       return;

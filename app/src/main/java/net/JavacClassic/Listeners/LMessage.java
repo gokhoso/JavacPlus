@@ -7,7 +7,7 @@ import net.JavacClassic.Handlers.Command.CommandMain;
 import net.JavacClassic.Handlers.Component.ComponentMain;
 import net.JavacClassic.Systems.BumpReminder;
 import net.JavacClassic.Systems.LoggerSystem;
-import net.JavacClassic.Systems.SpamProtect;
+import net.JavacClassic.Systems.SpamProtectRe;
 import net.dv8tion.jda.api.events.message.MessageDeleteEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.MessageUpdateEvent;
@@ -23,7 +23,7 @@ public class LMessage extends ListenerAdapter {
     private final LoggerSystem logSystem;
     private final CUser cUser;
 
-    SpamProtect sProtect = new SpamProtect();
+    SpamProtectRe sProtect;
     BumpReminder bReminder = new BumpReminder();
 
     public LMessage(
@@ -35,6 +35,7 @@ public class LMessage extends ListenerAdapter {
         this.componentMain = componentMain;
         this.commandMain = commandMain;
         this.logSystem = new LoggerSystem(cUser);
+        this.sProtect = new SpamProtectRe(cUser);
     }
 
     @Override
@@ -42,7 +43,7 @@ public class LMessage extends ListenerAdapter {
         cUser.addCache(event);
         commandMain.execute(event, componentMain, cUser);
 
-        sProtect.handleMessage(event);
+        sProtect.isSpamming(event);
         bReminder.run(event);
     }
 

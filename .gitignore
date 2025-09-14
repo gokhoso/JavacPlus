@@ -5,3 +5,11 @@
 build
 
 app/.env
+
+.gitignore
+
+.prettierrc.yaml
+
+.vscode
+
+.idea

@@ -1,0 +1,24 @@
+bot:
+  lang: "en"
+  guild_id: "1395427283531075784"
+  prefix: "c."
+  owners:
+    - "1376129374461493269"
+    - "1272106415963635786"
+
+config:
+  service_pool: 4
+
+cache:
+  max_message: 5
+  componentTTL: 30 #Seconds
+
+channels:
+  general: "1395427284231651421"
+  rule: "1395428501804548168"
+  log: "1399017428092194837"
+  count: "1395432390540787803"
+  rice: "1395434129214144716"
+
+roles:
+  member: "1398991930922369184"

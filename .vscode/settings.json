@@ -1,0 +1,7 @@
+{
+  "java.configuration.updateBuildConfiguration": "automatic",
+  "java.compile.nullAnalysis.mode": "automatic",
+  "editor.fontLigatures": false,
+  "editor.fontWeight": "bold",
+  "editor.fontSize": 13
+}
